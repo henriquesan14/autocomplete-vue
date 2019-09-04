@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-    <Autocomplete :shouldReset="false" 
+    <Autocomplete :idAutocomplete="1" :shouldReset="false" 
     title="Selecione..."
      :items="users" filterby="name" @selected="userSelected" @change="onChange"/>
+     <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
   </div>
 </template>
 

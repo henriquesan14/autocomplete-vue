@@ -1,11 +1,11 @@
 <template>
-    <div class="autocomplete">
+    <div class="autocomplete" :id="'autocomplete-'+idAutocomplete">
         <div class="input" @click="toggleVisible" v-text="selectedItem ? selectedItem[filterby] : ''" ></div>
         <div class="placeholder" v-if="selectedItem == null" v-text="title"></div>
-        <button class="close" @click="selectedItem = null" v-if="selectedItem">x</button>
+        <button class="close" @click="selectedItem = null" v-if="selectedItem"><i class="fas fa-times-circle"></i></button>
         <div v-show="visible" class="popover">
-            <input ref="input" type="text" v-model="query" @keydown.up="up" 
-            @keydown.down="down" @keydown.enter="selectItem" placeholder="Digite algo...">
+            <b-form-input size="sm" ref="input" type="text" v-model="query" @keydown.up="up" 
+            @keydown.down="down" @keydown.enter="selectItem" placeholder="Digite algo..."></b-form-input>
             <div class="options" ref="optionsList">
                 <ul>
                     <li :class="{'selected': (selected == index)}" v-for="(match, index) in matches" :key="index" v-text="match[filterby]" @click="itemClicked(index)">
@@ -35,6 +35,9 @@ export default {
         shouldReset: {
             type: Boolean,
             default: true
+        },
+        idAutocomplete: {
+            type: Number
         }
     },
     name: 'Autocomplete',
@@ -44,14 +47,14 @@ export default {
             query: '',
             visible: false,
             selected: 0,
-            selectedItem: null
+            selectedItem: null,
         }
     },
     mounted(){
         this.$nextTick(() => {
             window.addEventListener("click", (e) => {
-                const elements = e.path.map(e => e.className);
-                if(elements.includes('autocomplete')){
+                const elements = e.path.map(e => e.id);
+                if(elements.includes('autocomplete-'+this.idAutocomplete)){
                     return;
                 }
                 this.visible = false;
@@ -119,32 +122,37 @@ export default {
     }
 
     .input{
-        height: 40px;
+        height: 35px;
         border-radius: 3px;
         border: 2px solid lightgray;
         box-shadow: 0 0 10px #eceaea;
-        font-size: 25px;
+        font-size: 22px;
         padding-left: 10px;
-        padding-top: 10px;
         cursor: text;
     }
 
     .close {
+        font-size:22px;
+        color:#e74c3c;
         position: absolute;
         right: 2px;
-        top: 4px;
+        top: 7px;
         background: none;
         border: none;
-        font-size: 30px;
-        color: lightgrey;
         cursor: pointer;
     }
+    
+    .close i:hover{
+        color: #c0392b;
+    }
+
+    
 
     .placeholder{
         position: absolute;
-        top:11px;
+        top:2px;
         left: 11px;
-        font-size:25px;
+        font-size:20px;
         color: #d0d0d0;
         pointer-events: none;
     }
@@ -153,22 +161,22 @@ export default {
         min-height: 50px;
         border: 2px solid lightgray;
         position: absolute;
-        top:46px;
+        top:34px;
         left: 0;
         right: 0;
+        max-width: 100%;
         background: #fff;
         border-radius: 3px;
         text-align: center;
     }
 
     .popover input {
-        width: 95%;
+        width: 98%;
         margin-top: 5px;
-        height: 40px;
         font-size: 16px;
         border-radius: 3px;
         border: 1px solid lightgray;
-        padding-left: 8px;
+        margin: 8px auto;
     }
     
     .options {
@@ -199,8 +207,18 @@ export default {
     }
 
     .options ul li.selected {
-        background: #58bd4c;
+        background: #3498db;
         color: #fff;
         font-weight: 600;
+    }
+
+
+    ::-webkit-scrollbar {
+    width: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background-color: #2980b9;
     }
 </style>
